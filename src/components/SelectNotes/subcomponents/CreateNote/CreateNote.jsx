@@ -5,8 +5,7 @@ import { FaPlus } from "react-icons/fa";
 import AppContext from "../../../../context/AppContext";
 
 function CreateNote() {
-  const { modal, toggleModal, noteHeadings, setNoteHeadings } =
-    useContext(AppContext);
+  const { modal, toggleModal, setNoteHeadings } = useContext(AppContext);
   function randomLetters(s) {
     if (!s) {
       return "NA";
@@ -42,13 +41,19 @@ function CreateNote() {
     "#6691FF",
   ];
 
+  
+
   const addNote = () => {
     const letters = randomLetters(grpName);
     if (grpName && selectedColor) {
-      const newNotes = noteHeadings;
-      setNoteHeadings([
-        ...newNotes,
-        { name: grpName, color: selectedColor, letters: letters, notes: [] },
+      setNoteHeadings((prevNoteHeadings) => [
+        ...prevNoteHeadings,
+        {
+          name: grpName,
+          color: selectedColor,
+          letters: letters,
+          notes: [],
+        },
       ]);
       toggleModal();
       setGrpName("");
@@ -78,6 +83,15 @@ function CreateNote() {
     }
   }, [modal, toggleModal]);
 
+  const handleClickOutside = (event) => {
+    if (event.target.classList.contains(styles.modal)) {
+      toggleModal();
+      setGrpName("");
+      setSelectedColor("");
+      setError(false);
+    }
+  };
+
   return (
     <>
       <button className={styles.button} onClick={toggleModal}>
@@ -86,7 +100,7 @@ function CreateNote() {
         Create Notes group
       </button>
       {modal && (
-        <div className={styles.modal}>
+        <div className={styles.modal} onClick={handleClickOutside}>
           <div className={styles.modalContent}>
             <h3>Create New Notes</h3>
             <div>
