@@ -58,13 +58,15 @@ function NoteSection() {
   useEffect(() => {
     function handleKeyPress(e) {
       if (e.key === "Enter") {
-        addNote();
+        if(noteText.trim()!==""){
+          addNote();
+        }
       }
     }
     window.addEventListener("keydown", handleKeyPress);
 
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [addNote]);
+  }, [addNote, noteText]);
 
   if (!currentGroup && !isMobile) {
     return <HomePage />;
@@ -112,9 +114,9 @@ function NoteSection() {
           placeholder="Enter your text here"
           value={noteText}
           onChange={(e) => {
-            if (e.target.value.trim() !== "") {
+            // if (e.target.value.trim() !== "") {
               setNoteText(e.target.value);
-            }
+            // }
           }}
         ></textarea>
         <div onClick={addNote}>
